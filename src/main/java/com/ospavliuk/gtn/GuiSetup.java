@@ -977,72 +977,47 @@ public class GuiSetup extends JFrame {
     }
 
     private void initGlobalScore() {
+        BufferedReader reader = null;
+        BufferedWriter writer = null;
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(this.file));
-            Throwable var42 = null;
-
+            reader = new BufferedReader(new FileReader(file));
+            String s = reader.readLine();
+            globalScoreField.setText(s);
+            String[] score = s.split(":");
+            userWinCounter = Integer.parseInt(score[0]);
+            enemyWinCounter = Integer.parseInt(score[1]);
+            globalScoreField.setText("" + userWinCounter + ":" + enemyWinCounter);
+        } catch (FileNotFoundException e) {
             try {
-                String s = reader.readLine();
-                this.globalScoreField.setText(s);
-                String[] score = s.split(":");
-                this.userWinCounter = Integer.parseInt(score[0]);
-                this.enemyWinCounter = Integer.parseInt(score[1]);
-                this.globalScoreField.setText("" + this.userWinCounter + ":" + this.enemyWinCounter);
-            } catch (Throwable var35) {
-                var42 = var35;
-                throw var35;
-            } finally {
-                if (reader != null) {
-                    if (var42 != null) {
-                        try {
-                            reader.close();
-                        } catch (Throwable var34) {
-                            var42.addSuppressed(var34);
-                        }
-                    } else {
-                        reader.close();
-                    }
-                }
-
+                writer = new BufferedWriter(new FileWriter(file));
+                writer.write("0:0");
+            } catch (IOException e1) {
+                Logger.getLogger(GuiSetup.class.getName()).log(Level.SEVERE, (String) null, e1);
             }
-        } catch (FileNotFoundException var39) {
-            try {
-                BufferedWriter writer = new BufferedWriter(new FileWriter(this.file));
-                Throwable var3 = null;
-
+        }catch (IOException e3){
+            e3.printStackTrace();
+        }
+        finally {
+            try{
+                reader.close();
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+            if (writer != null) {
                 try {
-                    writer.write("0:0");
-                } catch (Throwable var33) {
-                    var3 = var33;
-                    throw var33;
-                } finally {
-                    if (writer != null) {
-                        if (var3 != null) {
-                            try {
-                                writer.close();
-                            } catch (Throwable var32) {
-                                var3.addSuppressed(var32);
-                            }
-                        } else {
-                            writer.close();
-                        }
-                    }
-
+                    writer.close();
+                } catch (IOException e2) {
+                    e2.printStackTrace();
                 }
-            } catch (IOException var37) {
-                Logger.getLogger(GuiSetup.class.getName()).log(Level.SEVERE, (String)null, var37);
             }
-        } catch (IOException var40) {
-            Logger.getLogger(GuiSetup.class.getName()).log(Level.SEVERE, (String)null, var40);
-        } catch (NumberFormatException var41) {
-            System.exit(0);
+
         }
 
-        if (this.userWinCounter == this.enemyWinCounter && this.userWinCounter != 0) {
+        if (this.userWinCounter == enemyWinCounter && userWinCounter != 0) {
             this.globalResultLabel.setText("Ничья!");
-        } else if (this.userWinCounter > this.enemyWinCounter) {
+        } else if (this.userWinCounter > enemyWinCounter) {
             this.globalResultLabel.setText("в Вашу пользу!");
-        } else if (this.userWinCounter < this.enemyWinCounter) {
+        } else if (this.userWinCounter < enemyWinCounter) {
             this.globalResultLabel.setText("не в Вашу пользу!");
         }
 

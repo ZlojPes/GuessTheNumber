@@ -13,6 +13,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <exeFileName>GuessTheNumber</exeFileName>
         <product.title>Guess the Number!</product.title>
+        <project.version>1.0.1</project.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
@@ -35,7 +36,7 @@
     <build>
         <sourceDirectory>src/main/java</sourceDirectory>
         <outputDirectory>target/classes</outputDirectory>
-        <finalName>Guess the Number</finalName>
+        <finalName>GuessTheNumber</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -113,21 +114,21 @@
                             <outfile>target/${exeFileName}.exe</outfile>
                             <jar>target/GuessTheNumber.jar</jar>
                             <errTitle>${product.title}</errTitle>
-                            <icon>TB.ico</icon>
+                            <icon>resources/qmark.ico</icon>
                             <classPath>
                                 <mainClass>com.ospavliuk.gtn.GuiSetup</mainClass>
                                 <addDependencies>true</addDependencies>
                                 <preCp>anything</preCp>
                             </classPath>
                             <jre>
-                                <minVersion>1.7.0</minVersion>
+                                <minVersion>1.0.7</minVersion>
                             </jre>
                             <versionInfo>
-                                <fileVersion>${project.version}.0</fileVersion>
+                                <fileVersion>1.0.1.0</fileVersion>
                                 <txtFileVersion>${project.version}</txtFileVersion>
                                 <fileDescription>my description</fileDescription>
-                                <copyright>Copyright В© 2017 Alexander Pavliuk</copyright>
-                                <productVersion>${project.version}.0</productVersion>
+                                <copyright>Copyright © 2017 Alexander Pavliuk</copyright>
+                                <productVersion>1.0.1.0</productVersion>
                                 <txtProductVersion>${project.version}</txtProductVersion>
                                 <companyName>Alexander Pavliuk</companyName>
                                 <productName>${product.title}</productName>
