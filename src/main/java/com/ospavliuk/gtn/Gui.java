@@ -7,9 +7,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
 
-public class GuiSetup extends JFrame {
+public class Gui extends JFrame {
 
-    public GuiSetup() {
+    public Gui() {
         initComponents();
         JButton[] keybrd = {jButton0, jButton1, jButton2, jButton3, jButton4, jButton5, jButton6, jButton7, jButton8, jButton9, jButtonBack, enterButton};
         keyboard = keybrd;
@@ -18,8 +18,8 @@ public class GuiSetup extends JFrame {
         jButtonBack.setEnabled(false);
         infoString.setEditable(false);
         setManualScoreEnabled(false);
-        this.file = new File((new JFileChooser()).getFileSystemView().getDefaultDirectory().toString() + "\\num");
-        this.initGlobalScore();
+        file = new File((new JFileChooser()).getFileSystemView().getDefaultDirectory().toString() + "\\num");
+        initGlobalScore();
     }
 
     @SuppressWarnings("unchecked")
@@ -528,21 +528,26 @@ public class GuiSetup extends JFrame {
 
     private void jButtonAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAllActionPerformed
         JTextField temp;
-        if (numberInput.isEnabled())
+        if (numberInput.isEnabled()) {
             temp = numberInput;
-        else if (scoreField1.getText().length() == 0)
-            temp = scoreField1;
-        else
-            temp = scoreField2;
+        } else {
+            if (scoreField1.getText().length() == 0) {
+                temp = scoreField1;
+            } else {
+                temp = scoreField2;
+            }
+        }
         temp.setText(numberInput.getText() + ((JButton) evt.getSource()).getText());
         setUsedKeysDisabled();
     }//GEN-LAST:event_jButtonAllActionPerformed
 
     private void enterButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enterButtonActionPerformed
 
-        if (startButton.getText().equals("Начать игру!"))
+        if (startButton.getText().equals("Начать игру!")) {
             beforeStartEnterCommands();
-        else afterStartEnterCommands();
+        } else {
+            afterStartEnterCommands();
+        }
     }//GEN-LAST:event_enterButtonActionPerformed
 
     private void jButtonBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBackActionPerformed
@@ -662,12 +667,7 @@ public class GuiSetup extends JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
-         */
+    static {
         try {
             for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -676,22 +676,15 @@ public class GuiSetup extends JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(GuiSetup.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Gui.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(GuiSetup.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Gui.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(GuiSetup.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Gui.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(GuiSetup.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Gui.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
 
-        /* Create and display the form */
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new GuiSetup().setVisible(true);
-            }
-        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -749,11 +742,13 @@ public class GuiSetup extends JFrame {
             int caret = numberInput.getCaretPosition();
             UniqueDigits ud = new UniqueDigits(text);
             java.util.List<Integer> output = ud.normalize();
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 10; i++) {
                 keyboard[i].setEnabled(!output.contains(i));
+            }
             String t = "";
-            for (int i : output)
+            for (int i : output) {
                 t += i;
+            }
             numberInput.setText(t);
             jButtonBack.setEnabled(t.length() > 0);
             numberInput.setCaretPosition(caret < t.length() ? caret : t.length());
@@ -763,8 +758,9 @@ public class GuiSetup extends JFrame {
 
 
     private void keyboardEnabled(boolean en) {
-        for (JButton b : keyboard)
+        for (JButton b : keyboard) {
             b.setEnabled(en);
+        }
         if (!scoreField1.isEnabled()) {
             numberInput.setEnabled(en);
             jLabel5.setEnabled(en);
@@ -791,23 +787,25 @@ public class GuiSetup extends JFrame {
         String s1 = "", s2;
         if (value.length == 4) {
             s2 = "" + value[0] + value[1] + value[2] + value[3] + " - ";
-            if (firstValue)
+            if (firstValue) {
                 s1 = counter + 1 + ").   ";
-            else {
+            } else {
                 s1 = "      ";
-                if (restrictEnemy)
+                if (restrictEnemy) {
                     s2 = "**** - ";
+                }
             }
-        } else
+        } else {
             s2 = "" + value[0] + ":" + value[1];
-        if ((!firstValue) && value.length == 2)
+        }
+        if ((!firstValue) && value.length == 2) {
             s2 += "\n";
+        }
         jTextPane1.setText(jTextPane1.getText() + s1 + s2);
     }
 
     protected void print(String text) {
         jTextPane1.setText(jTextPane1.getText() + "\n" + text);
-
     }
 
     private void printAll() {
@@ -858,21 +856,18 @@ public class GuiSetup extends JFrame {
                     scoreField1.requestFocus();
                 } catch (WrongScoreException ex) {
                     wrongScore();
-//                    Logger.getLogger(GuiSetup.class.getName()).log(Level.SEVERE, null, ex);
                 }
-
             }
         } else {
             keyboardEnabled(true);
             getManualScore();
         }
-
     }
 
     private void checkWinner(int[] userScore, int[] enemyScore) {
         try {
             if (jComboBox3.getSelectedIndex() == 2 && enemyScore[1] < 4)
-                artInt.makeYourMove();
+                artInt.nextMove();
             if (userScore[1] == 4 || enemyScore[1] == 4) {
                 printAll();
                 if (userScore[1] == 4 && enemyScore[1] == 4) {
@@ -918,7 +913,7 @@ public class GuiSetup extends JFrame {
     private int[] getEnemyMove() throws ManualScoreException, WrongScoreException {
         if (jComboBox1.getSelectedIndex() == 0) {
             int[] score;
-            int[] artIntMove = artInt.makeYourMove();
+            int[] artIntMove = artInt.nextMove();
             int[] mixedMove = mixer.getMix(artIntMove);
             print(false, mixedMove);
             if (jComboBox3.getSelectedIndex() != 2)
@@ -992,15 +987,14 @@ public class GuiSetup extends JFrame {
                 writer = new BufferedWriter(new FileWriter(file));
                 writer.write("0:0");
             } catch (IOException e1) {
-                Logger.getLogger(GuiSetup.class.getName()).log(Level.SEVERE, (String) null, e1);
+                Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, (String) null, e1);
             }
-        }catch (IOException e3){
+        } catch (IOException e3) {
             e3.printStackTrace();
-        }
-        finally {
-            try{
+        } finally {
+            try {
                 reader.close();
-            }catch (IOException e){
+            } catch (IOException e) {
                 e.printStackTrace();
             }
             if (writer != null) {
@@ -1010,18 +1004,14 @@ public class GuiSetup extends JFrame {
                     e2.printStackTrace();
                 }
             }
-
         }
-
-        if (this.userWinCounter == enemyWinCounter && userWinCounter != 0) {
-            this.globalResultLabel.setText("Ничья!");
-        } else if (this.userWinCounter > enemyWinCounter) {
-            this.globalResultLabel.setText("в Вашу пользу!");
-        } else if (this.userWinCounter < enemyWinCounter) {
-            this.globalResultLabel.setText("не в Вашу пользу!");
+        if (userWinCounter == enemyWinCounter && userWinCounter != 0) {
+            globalResultLabel.setText("Ничья!");
+        } else if (userWinCounter > enemyWinCounter) {
+            globalResultLabel.setText("в Вашу пользу!");
+        } else if (userWinCounter < enemyWinCounter) {
+            globalResultLabel.setText("не в Вашу пользу!");
         }
-
     }
-
 }
 

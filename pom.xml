@@ -77,7 +77,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.ospavliuk.gtn.GuiSetup</mainClass>
+                            <mainClass>com.ospavliuk.gtn.Gui</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -89,7 +89,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.ospavliuk.gtn.GuiSetup</mainClass>
+                            <mainClass>com.ospavliuk.gtn.Gui</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
@@ -116,7 +116,7 @@
                             <errTitle>${product.title}</errTitle>
                             <icon>resources/qmark.ico</icon>
                             <classPath>
-                                <mainClass>com.ospavliuk.gtn.GuiSetup</mainClass>
+                                <mainClass>com.ospavliuk.gtn.Gui</mainClass>
                                 <addDependencies>true</addDependencies>
                                 <preCp>anything</preCp>
                             </classPath>

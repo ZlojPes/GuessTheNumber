@@ -5,9 +5,9 @@ import java.util.logging.Logger;
 
 public class Ticker {
     private String text;
-    GuiSetup gs;
+    Gui gs;
 
-    Ticker(String text, GuiSetup gs) {
+    Ticker(String text, Gui gs) {
         this.text = text;
         this.gs = gs;
         go();
