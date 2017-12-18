@@ -1,31 +1,42 @@
 package com.ospavliuk.gtn;
 
 import java.awt.*;
+import java.awt.event.*;
 import java.io.*;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.*;
+import javax.swing.event.CaretEvent;
 
 public class Gui extends JFrame {
 
-    public Gui() {
-        initComponents();
-        JButton[] keybrd = {jButton0, jButton1, jButton2, jButton3, jButton4, jButton5, jButton6, jButton7, jButton8, jButton9, jButtonBack, enterButton};
-        keyboard = keybrd;
-        startButton.setEnabled(false);
-        enterButton.setEnabled(false);
-        jButtonBack.setEnabled(false);
-        infoString.setEditable(false);
-        setManualScoreEnabled(false);
-        file = new File((new JFileChooser()).getFileSystemView().getDefaultDirectory().toString() + "\\num");
-        initGlobalScore();
+    static {
+        try {
+            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(Gui.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(Gui.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(Gui.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(Gui.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+
     }
 
-    @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    public Gui(Game game) {
+        this.game = game;
+        initComponents();
+        keyboard = new JButton[]{jButton0, jButton1, jButton2, jButton3, jButton4, jButton5, jButton6, jButton7, jButton8, jButton9, jButtonBack, enterButton};
 
+    }
+
+    private void initComponents() {
         jLayeredPane1 = new JLayeredPane();
         jPanel1 = new JPanel();
         jScrollPane1 = new JScrollPane();
@@ -64,6 +75,11 @@ public class Gui extends JFrame {
         scoreLabel2 = new JLabel();
         scoreField1 = new JTextField();
         startButton = new JButton();
+        startButton.setEnabled(false);
+        enterButton.setEnabled(false);
+        jButtonBack.setEnabled(false);
+        infoString.setEditable(false);
+        setManualScoreEnabled(false);
 
         GroupLayout jLayeredPane1Layout = new GroupLayout(jLayeredPane1);
         jLayeredPane1.setLayout(jLayeredPane1Layout);
@@ -109,21 +125,6 @@ public class Gui extends JFrame {
         globalScoreField.setCursor(new Cursor(Cursor.TEXT_CURSOR));
         globalScoreField.setDisabledTextColor(new Color(153, 153, 153));
         globalScoreField.setDoubleBuffered(true);
-        globalScoreField.addCaretListener(new javax.swing.event.CaretListener() {
-            public void caretUpdate(javax.swing.event.CaretEvent evt) {
-                totalScoreFieldCaretUpdate(evt);
-            }
-        });
-        globalScoreField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                totalScoreFieldActionPerformed(evt);
-            }
-        });
-        globalScoreField.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                totalScoreFieldKeyReleased(evt);
-            }
-        });
 
         GroupLayout jPanel1Layout = new GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -211,7 +212,7 @@ public class Gui extends JFrame {
         });
         numberInput.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                numberInputActionPerformed(evt);
+                game.enter(numberInput.getText());
             }
         });
         numberInput.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -220,91 +221,52 @@ public class Gui extends JFrame {
             }
         });
 
+
         jButton1.setText("1");
         jButton1.setPreferredSize(new Dimension(62, 37));
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonAllActionPerformed(evt);
-            }
-        });
+        jButton1.addActionListener(listener);
 
         jButton2.setText("2");
         jButton2.setPreferredSize(new Dimension(62, 37));
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonAllActionPerformed(evt);
-            }
-        });
+        jButton2.addActionListener(listener);
 
         jButton3.setText("3");
         jButton3.setPreferredSize(new Dimension(62, 37));
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonAllActionPerformed(evt);
-            }
-        });
-
-        jButton6.setText("6");
-        jButton6.setPreferredSize(new Dimension(62, 37));
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonAllActionPerformed(evt);
-            }
-        });
+        jButton3.addActionListener(listener);
 
         jButton4.setText("4");
         jButton4.setPreferredSize(new Dimension(62, 37));
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonAllActionPerformed(evt);
-            }
-        });
+        jButton4.addActionListener(listener);
 
         jButton5.setText("5");
         jButton5.setPreferredSize(new Dimension(62, 37));
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonAllActionPerformed(evt);
-            }
-        });
+        jButton5.addActionListener(listener);
+
+        jButton6.setText("6");
+        jButton6.setPreferredSize(new Dimension(62, 37));
+        jButton6.addActionListener(listener);
 
         jButton7.setText("7");
         jButton7.setPreferredSize(new Dimension(62, 37));
-        jButton7.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonAllActionPerformed(evt);
-            }
-        });
-
-        jButton9.setText("9");
-        jButton9.setPreferredSize(new Dimension(62, 37));
-        jButton9.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonAllActionPerformed(evt);
-            }
-        });
+        jButton7.addActionListener(listener);
 
         jButton8.setText("8");
         jButton8.setPreferredSize(new Dimension(62, 37));
-        jButton8.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonAllActionPerformed(evt);
-            }
-        });
+        jButton8.addActionListener(listener);
+
+        jButton9.setText("9");
+        jButton9.setPreferredSize(new Dimension(62, 37));
+        jButton9.addActionListener(listener);
 
         jButton0.setText("0");
         jButton0.setPreferredSize(new Dimension(62, 37));
-        jButton0.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonAllActionPerformed(evt);
-            }
-        });
+        jButton0.addActionListener(listener);
 
         enterButton.setText("ввод");
         enterButton.setPreferredSize(new Dimension(62, 37));
         enterButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                enterButtonActionPerformed(evt);
+                game.enter(numberInput.getText());
             }
         });
 
@@ -376,7 +338,7 @@ public class Gui extends JFrame {
         });
         scoreField2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                scoreField2ActionPerformed(evt);
+                game.calculateScore();
             }
         });
         scoreField2.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -511,11 +473,55 @@ public class Gui extends JFrame {
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(startButton, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE))
         );
-
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    }
 
-    private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
+    public void nextMove() {
+        keyboardEnabled(true);
+        numberInput.requestFocus();
+        moveCounter++;
+    }
+
+    private class KeyboardListener implements ActionListener {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            JTextField activeField;
+            if (numberInput.isEnabled()) {
+                activeField = numberInput;
+            } else {
+                if (scoreField1.getText().length() == 0) {
+                    activeField = scoreField1;
+                } else {
+                    activeField = scoreField2;
+                }
+            }
+            activeField.setText(numberInput.getText() + ((JButton) evt.getSource()).getText());
+            setUsedKeysDisabled();
+        }
+    }
+
+    class Settings {
+        int typeGame1 = jComboBox1.getSelectedIndex();
+        boolean typeGame1Enabled = jComboBox1.isEnabled();
+        int guess2 = jComboBox2.getSelectedIndex();
+        boolean guess2Enabled = jComboBox2.isEnabled();
+        int ownNumber3 = jComboBox3.getSelectedIndex();
+        boolean ownNumber3Enabled = jComboBox3.isEnabled();
+        boolean numberInputEnabled = numberInput.isEnabled();
+    }
+
+    public Settings getCurrentSettings(){
+        return new Settings();
+    }
+
+    String getNumberInputText(){
+        return numberInput.getText();
+    }
+
+    void setNumberInputText(String text){
+        numberInput.setText(text);
+    }
+
+    private void jComboBox2ActionPerformed(ActionEvent evt) {
         jComboBox3.setSelectedIndex(jComboBox2.getSelectedIndex());
         jComboBox3.setEnabled(jComboBox2.getSelectedIndex() == 0);
         keyboardEnabled(jComboBox2.getSelectedIndex() == 0);
@@ -524,81 +530,46 @@ public class Gui extends JFrame {
         numberInput.setEnabled(jComboBox2.getSelectedIndex() == 0);
         startButton.setEnabled(jComboBox2.getSelectedIndex() == 1);
         enterButton.setEnabled(false);
-    }//GEN-LAST:event_jComboBox2ActionPerformed
+    }
 
-    private void jButtonAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAllActionPerformed
-        JTextField temp;
-        if (numberInput.isEnabled()) {
-            temp = numberInput;
-        } else {
-            if (scoreField1.getText().length() == 0) {
-                temp = scoreField1;
-            } else {
-                temp = scoreField2;
-            }
-        }
-        temp.setText(numberInput.getText() + ((JButton) evt.getSource()).getText());
-        setUsedKeysDisabled();
-    }//GEN-LAST:event_jButtonAllActionPerformed
-
-    private void enterButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enterButtonActionPerformed
-
-        if (startButton.getText().equals("Начать игру!")) {
-            beforeStartEnterCommands();
-        } else {
-            afterStartEnterCommands();
-        }
-    }//GEN-LAST:event_enterButtonActionPerformed
-
-    private void jButtonBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBackActionPerformed
+    private void jButtonBackActionPerformed(ActionEvent evt) {
         String text = numberInput.getText();
         if (text.length() > 0) {
-            numberInput.setText(text.substring(0, text.length() - 1));       // TODO add your handling code here:
+            numberInput.setText(text.substring(0, text.length() - 1));
             setUsedKeysDisabled();
         } else jButtonBack.setEnabled(false);
-    }//GEN-LAST:event_jButtonBackActionPerformed
+    }
 
-    private void numberInputKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_numberInputKeyReleased
+    private void numberInputKeyReleased(KeyEvent evt) {
         setUsedKeysDisabled();
-    }//GEN-LAST:event_numberInputKeyReleased
+    }
 
-    private void numberInputCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_numberInputCaretUpdate
+    private void numberInputCaretUpdate(CaretEvent evt) {
         enterButton.setEnabled(numberInput.getText().length() == 4);
-    }//GEN-LAST:event_numberInputCaretUpdate
+    }
 
-    private void jComboBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox3ActionPerformed
-        boolean boo = jComboBox3.getSelectedIndex() == 0;
-        keyboardEnabled(boo);
-        jLabel4.setEnabled(boo);
-        jLabel5.setEnabled(boo);
-        numberInput.setEnabled(boo);
-        startButton.setEnabled(!boo);
-        if (!boo) numberInput.setText("");
-    }//GEN-LAST:event_jComboBox3ActionPerformed
+    private void jComboBox3ActionPerformed(ActionEvent evt) {
+        boolean b = jComboBox3.getSelectedIndex() == 0;
+        keyboardEnabled(b);
+        jLabel4.setEnabled(b);
+        jLabel5.setEnabled(b);
+        numberInput.setEnabled(b);
+        startButton.setEnabled(!b);
+        if (!b) numberInput.setText("");
+    }
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+    private void jComboBox1ActionPerformed(ActionEvent evt) {
         jComboBox1.setSelectedIndex(0);
         new Ticker("Сетевая игра в процессе разработки!", this);
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+    }
 
-    private void startButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startButtonActionPerformed
-        if (startButton.getText().equals("Начать игру!")) {
+    private void startButtonActionPerformed(ActionEvent evt) {
+        if (!game.isGameStarted()) {
             startButton.setText("Прервать игру");
-            counter = 0;
-            restrictEnemy = jComboBox2.getSelectedIndex() == 1;
-            artInt = new ArtInt3();
-            mixer = new Mixer();
-            userTurns = new ArrayList<>();
-            if (jComboBox1.getSelectedIndex() == 0 && jComboBox2.getSelectedIndex() == 0)
-                enemyNum = RandomGen.getRandom();
-            if (jComboBox2.getSelectedIndex() == 1)
-                enemyNum = userNum = RandomGen.getRandom();
-            if (jComboBox3.isEnabled() && jComboBox3.getSelectedIndex() == 1) {
-                userNum = RandomGen.getRandom();
-                new Ticker("Ваше число установлено как " + userNum[0] + userNum[1] + userNum[2] + userNum[3], this);
-            }
-            if (jComboBox3.isEnabled() && jComboBox3.getSelectedIndex() == 2)
-                userNum = null;
+            game.setGameStarted(true);
+            game.start();
+            moveCounter = 0;
+            hideEnemyMoves = jComboBox2.getSelectedIndex() == 1;
             keyboardEnabled(true);
             jButtonBack.setEnabled(false);
             settingsEnabled(false);
@@ -609,86 +580,46 @@ public class Gui extends JFrame {
             numberInput.requestFocus();
         } else {
             stopGame();
-            print("Прервано пользователем");
+            game.setGameStarted(false);
+            game.start();
         }
-    }//GEN-LAST:event_startButtonActionPerformed
+    }
 
-    private void numberInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_numberInputActionPerformed
-        enterButtonActionPerformed(evt);        // TODO add your handling code here:
-    }//GEN-LAST:event_numberInputActionPerformed
-
-    private void scoreField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreField1KeyReleased
+    private void scoreField1KeyReleased(java.awt.event.KeyEvent evt) {
         String text = scoreField1.getText();
         try {
             Integer n = Integer.parseInt(text);
             if (n < 5 && n > -1) {
                 scoreField2.setText("");
                 scoreField2.requestFocus();
-            } else
+            } else {
                 scoreField1.setText("");
+            }
         } catch (NumberFormatException e) {
             scoreField1.setText("");
         }
-    }//GEN-LAST:event_scoreField1KeyReleased
+    }
 
-    private void scoreField2KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_scoreField2KeyReleased
+    private void scoreField2KeyReleased(KeyEvent evt) {
         String text = scoreField2.getText();
         try {
             Integer n = Integer.parseInt(text);
             if (n < 5 && n > -1 && n <= Integer.parseInt(scoreField1.getText())) {
                 enterButton.setEnabled(true);
-            } else
+            } else {
                 scoreField1.setText("");
+            }
         } catch (NumberFormatException e) {
             scoreField1.setText("");
         }
-    }//GEN-LAST:event_scoreField2KeyReleased
-
-    private void scoreField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_scoreField2ActionPerformed
-        getManualScore();
-    }//GEN-LAST:event_scoreField2ActionPerformed
-
-    private void scoreField2CaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_scoreField2CaretUpdate
-        enterButton.setEnabled(scoreField2.getText().length() == 1);
-    }//GEN-LAST:event_scoreField2CaretUpdate
-
-    private void totalScoreFieldCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_totalScoreFieldCaretUpdate
-        // TODO add your handling code here:
-    }//GEN-LAST:event_totalScoreFieldCaretUpdate
-
-    private void totalScoreFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_totalScoreFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_totalScoreFieldActionPerformed
-
-    private void totalScoreFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_totalScoreFieldKeyReleased
-        // TODO add your handling code here:
-    }//GEN-LAST:event_totalScoreFieldKeyReleased
-
-    /**
-     * @param args the command line arguments
-     */
-    static {
-        try {
-            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Gui.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Gui.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Gui.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Gui.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-
     }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private File file;
+    private void scoreField2CaretUpdate(CaretEvent evt) {
+        enterButton.setEnabled(scoreField2.getText().length() == 1);
+    }
+
+    private Game game;
+    private File scoreFile;
     private JButton enterButton;
     protected JTextField infoString;
     private JButton jButton0;
@@ -727,14 +658,13 @@ public class Gui extends JFrame {
     private JLabel globalResultLabel;
     private JTextField globalScoreField;
     private JLabel totalScoreLabel;
-    // End of variables declaration//GEN-END:variables
     private final JButton[] keyboard;
-    private int[] userNum, enemyNum;
-    private ArtInt3 artInt;
+    private ArtInt artInt;
     private Mixer mixer;
-    private ArrayList<int[]> userTurns;
-    private int counter, userWinCounter, enemyWinCounter;
-    private boolean restrictEnemy;
+    private ArrayList<int[]> userMoves;
+    private int moveCounter;
+    private boolean hideEnemyMoves;
+    private KeyboardListener listener = new KeyboardListener();
 
     private void setUsedKeysDisabled() {
         if (numberInput.isEnabled()) {
@@ -756,7 +686,6 @@ public class Gui extends JFrame {
         }
     }
 
-
     private void keyboardEnabled(boolean en) {
         for (JButton b : keyboard) {
             b.setEnabled(en);
@@ -767,8 +696,9 @@ public class Gui extends JFrame {
             jButtonBack.setEnabled(en && numberInput.getText().length() > 0);
             enterButton.setEnabled(en && numberInput.getText().length() == 4);
         } else {
-            for (int i = 5; i < 10; i++)
+            for (int i = 5; i < 10; i++) {
                 keyboard[i].setEnabled(false);
+            }
         }
     }
 
@@ -780,7 +710,6 @@ public class Gui extends JFrame {
         jComboBox1.setEnabled(b);
         jComboBox2.setEnabled(b);
         jComboBox3.setEnabled(b && jComboBox2.getSelectedIndex() == 0);
-//        setManualScoreEnabled(b);
     }
 
     protected void print(boolean firstValue, int[] value) {
@@ -788,10 +717,10 @@ public class Gui extends JFrame {
         if (value.length == 4) {
             s2 = "" + value[0] + value[1] + value[2] + value[3] + " - ";
             if (firstValue) {
-                s1 = counter + 1 + ").   ";
+                s1 = moveCounter + 1 + ").   ";
             } else {
                 s1 = "      ";
-                if (restrictEnemy) {
+                if (hideEnemyMoves) {
                     s2 = "**** - ";
                 }
             }
@@ -808,14 +737,14 @@ public class Gui extends JFrame {
         jTextPane1.setText(jTextPane1.getText() + "\n" + text);
     }
 
-    private void printAll() {
+    protected void printAll() {
         jTextPane1.setText("");
-        if (userTurns.size() == artInt.getLog().size()) {
-            for (int i = 0; i < userTurns.size(); i++) {
-                counter = i;
-                restrictEnemy = false;
-                int[] a = userTurns.get(i);
-                int[] b = artInt.getLog().get(i);
+        if (userMoves.size() == artInt.getPrevMoves().size()) {
+            for (int i = 0; i < userMoves.size(); i++) {
+                moveCounter = i;
+                hideEnemyMoves = false;
+                int[] a = userMoves.get(i);
+                int[] b = artInt.getPrevMoves().get(i);
                 print(true, new int[]{a[0], a[1], a[2], a[3]});
                 print(true, new int[]{a[4], a[5]});
                 print(false, mixer.getMix(new int[]{b[0], b[1], b[2], b[3]}));
@@ -824,116 +753,21 @@ public class Gui extends JFrame {
         }
     }
 
-    private void beforeStartEnterCommands() {
-        String text = numberInput.getText();
-        UniqueDigits un = new UniqueDigits(text.toCharArray());
-        if (un.isValidNumber()) {
-            new Ticker("Ваше число установлено как " + text + ". Нажмите \"начать игру!\" для старта", this);
-            userNum = un.getIntArray();
-            startButton.setEnabled(true);
-        } else new Ticker("Проверьте данные и попробуйте еще раз!", this);
+    void setStartButtonEnabled(boolean enabled){
+        startButton.setEnabled(enabled);
     }
 
-    private void afterStartEnterCommands() {
-        if (numberInput.isEnabled()) {
-            String text = numberInput.getText();
-            UniqueDigits un = new UniqueDigits(text.toCharArray());
-            if (un.isValidNumber()) {
-                int[] userNumber = un.getIntArray();
-                print(true, userNumber);
-                print(true, getRemoteScore(userNumber));
-                int[] userScore = getRemoteScore(userNumber);
-                userTurns.add(new int[]{userNumber[0], userNumber[1], userNumber[2], userNumber[3], userScore[0], userScore[1]});
-                int[] enemyTurn = null;
-                try {
-                    numberInput.setText("");
-                    enemyTurn = getEnemyMove();
-                    if (numberInput.isEnabled() && enemyTurn != null)
-                        checkWinner(userScore, enemyTurn);
-                } catch (ManualScoreException ex) {
-                    setManualScoreEnabled(true);
-                    keyboardEnabled(true);
-                    scoreField1.requestFocus();
-                } catch (WrongScoreException ex) {
-                    wrongScore();
-                }
-            }
-        } else {
-            keyboardEnabled(true);
-            getManualScore();
-        }
+    void manualScorePrepare(){
+        setManualScoreEnabled(true);
+        keyboardEnabled(true);
+        scoreField1.requestFocus();
     }
 
-    private void checkWinner(int[] userScore, int[] enemyScore) {
-        try {
-            if (jComboBox3.getSelectedIndex() == 2 && enemyScore[1] < 4)
-                artInt.nextMove();
-            if (userScore[1] == 4 || enemyScore[1] == 4) {
-                printAll();
-                if (userScore[1] == 4 && enemyScore[1] == 4) {
-                    print("Ничья!");
-                    stopGame();
-                } else if (userScore[1] == 4) {
-                    print("Вы выиграли!");
-                    userWinCounter++;
-                    stopGame();
-                } else if (enemyScore[1] == 4) {
-                    print("Вы проиграли!");
-                    if (jComboBox1.getSelectedIndex() == 0 && jComboBox2.getSelectedIndex() == 0)
-                        print("Вашей целью было число " + enemyNum[0] + enemyNum[1] + enemyNum[2] + enemyNum[3]);
-                    enemyWinCounter++;
-                    stopGame();
-                }
-                globalScoreField.setText("" + userWinCounter + "-" + enemyWinCounter);
-                if (userWinCounter == enemyWinCounter && userWinCounter != 0)
-                    globalResultLabel.setText("Ничья!");
-                else if (userWinCounter > enemyWinCounter)
-                    globalResultLabel.setText("в Вашу пользу!");
-                else if (userWinCounter < enemyWinCounter)
-                    globalResultLabel.setText("не в Вашу пользу!");
-            } else {
-                keyboardEnabled(true);
-                numberInput.requestFocus();
-                counter++;
-            }
-        } catch (WrongScoreException ex) {
-            wrongScore();
-        }
+    int[] getManualScore(){
+        return new int[]{Integer.parseInt(scoreField1.getText()), Integer.parseInt(scoreField2.getText())};
     }
 
-    private int[] getRemoteScore(int[] intArray) {
-        if (jComboBox1.getSelectedIndex() == 0) {
-            int[] score = Score.getScore(enemyNum, intArray);
-            return new int[]{score[score.length - 2], score[score.length - 1]};
-        }
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-
-    }
-
-    private int[] getEnemyMove() throws ManualScoreException, WrongScoreException {
-        if (jComboBox1.getSelectedIndex() == 0) {
-            int[] score;
-            int[] artIntMove = artInt.nextMove();
-            int[] mixedMove = mixer.getMix(artIntMove);
-            print(false, mixedMove);
-            if (jComboBox3.getSelectedIndex() != 2)
-                score = Score.getScore(userNum, mixedMove);
-            else {
-                artInt.writeToLog(artIntMove);
-                throw new ManualScoreException();
-            }
-            print(false, score);
-            int[] toLog = new int[6];
-            System.arraycopy(artIntMove, 0, toLog, 0, 4);
-            System.arraycopy(score, 0, toLog, 4, 2);
-            artInt.writeToLog(toLog);
-            return score;
-
-        }
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    private void stopGame() {
+    void stopGame() {
         startButton.setText("Начать игру!");
         jLabel5.setText("Введите собственное число:");
         keyboardEnabled(jComboBox3.getSelectedIndex() == 0);
@@ -942,74 +776,23 @@ public class Gui extends JFrame {
         setManualScoreEnabled(false);
     }
 
-    private void setManualScoreEnabled(boolean b) {
+    void setManualScoreEnabled(boolean b) {
         numberInput.setEnabled(!b);
         scoreLabel.setEnabled(b);
         scoreLabel2.setEnabled(b);
+        scoreField1.setText("");
+        scoreField2.setText("");
         scoreField1.setEnabled(b);
         scoreField2.setEnabled(b);
     }
 
-    private void getManualScore() {
-        int[] score2 = new int[]{Integer.parseInt(scoreField1.getText()), Integer.parseInt(scoreField2.getText())};
-        print(false, score2);
-        ArrayList<int[]> log = artInt.getLog();
-        int[] last = log.get(log.size() - 1);
-        int[] output = new int[]{last[0], last[1], last[2], last[3], score2[0], score2[1]};
-        artInt.getLog().remove(log.size() - 1);
-        artInt.writeToLog(output);
-        int[] score1 = new int[]{userTurns.get(userTurns.size() - 1)[4], userTurns.get(userTurns.size() - 1)[5]};
-        numberInput.setEnabled(true);
-        scoreField1.setText("");
-        scoreField2.setText("");
-        setManualScoreEnabled(false);
-        checkWinner(score1, score2);
-    }
-
-    private void wrongScore() {
-        print("Вы допустили ошибку при вводе счёта в одном из ходов. Вам засчитывается техническое поражение.");
-        stopGame();
-    }
-
-    private void initGlobalScore() {
-        BufferedReader reader = null;
-        BufferedWriter writer = null;
-        try {
-            reader = new BufferedReader(new FileReader(file));
-            String s = reader.readLine();
-            globalScoreField.setText(s);
-            String[] score = s.split(":");
-            userWinCounter = Integer.parseInt(score[0]);
-            enemyWinCounter = Integer.parseInt(score[1]);
-            globalScoreField.setText("" + userWinCounter + ":" + enemyWinCounter);
-        } catch (FileNotFoundException e) {
-            try {
-                writer = new BufferedWriter(new FileWriter(file));
-                writer.write("0:0");
-            } catch (IOException e1) {
-                Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, (String) null, e1);
-            }
-        } catch (IOException e3) {
-            e3.printStackTrace();
-        } finally {
-            try {
-                reader.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            if (writer != null) {
-                try {
-                    writer.close();
-                } catch (IOException e2) {
-                    e2.printStackTrace();
-                }
-            }
-        }
-        if (userWinCounter == enemyWinCounter && userWinCounter != 0) {
+    void setGlobalScore(int[]score){
+        globalScoreField.setText("" + score[0] + ":" + score[1]);
+        if (score[0] == score[1] && score[0] != 0) {
             globalResultLabel.setText("Ничья!");
-        } else if (userWinCounter > enemyWinCounter) {
+        } else if (score[0] > score[1]) {
             globalResultLabel.setText("в Вашу пользу!");
-        } else if (userWinCounter < enemyWinCounter) {
+        } else if (score[0] < score[1]) {
             globalResultLabel.setText("не в Вашу пользу!");
         }
     }
