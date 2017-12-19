@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static jdk.nashorn.internal.objects.Global.print;
-
 public class Game {
     Gui gui;
     ArtInt artInt;
@@ -17,6 +15,7 @@ public class Game {
     private ArrayList<int[]> userMoves;
     private int[] compNum, userNum;
     private File scoreFile;
+    private int moveCounter;
 
     public boolean isGameStarted() {
         return gameStarted;
@@ -37,10 +36,11 @@ public class Game {
         if (gameStarted) {
             artInt = new ArtInt();
             mixer = new Mixer();
+            moveCounter = 0;
             userMoves = new ArrayList<>();
             Gui.Settings settings = gui.getCurrentSettings();
 //            if (settings.typeGame1 == 0 && settings.guess2 == 0)
-                compNum = RandomGen.getRandom();
+            compNum = RandomGen.getRandom();
             if (settings.guess2 == 1) {
                 userNum = compNum;
             }
@@ -51,6 +51,10 @@ public class Game {
         } else {
             gui.print("Прервано пользователем");
         }
+    }
+
+    public int getMoveCounter() {
+        return moveCounter;
     }
 
     public void enter(String inputNumber) {
@@ -109,11 +113,13 @@ public class Game {
 
     private void checkWinner(int[] userScore, int[] compScore) {
         Gui.Settings settings = gui.getCurrentSettings();
+        moveCounter++;
         try {
-            if (settings.ownNumber3 == 2 && compScore[1] < 4)
+            if (settings.ownNumber3 == 2 && compScore[1] < 4) {
                 artInt.nextMove();
+            }
             if (userScore[1] == 4 || compScore[1] == 4) {
-                gui.printAll();
+                printAll();
                 if (userScore[1] == 4 && compScore[1] == 4) {
                     gui.print("Ничья!");
                     gui.stopGame();
@@ -134,6 +140,22 @@ public class Game {
             }
         } catch (WrongScoreException ex) {
             wrongScore();
+        }
+    }
+
+    protected void printAll() {
+        gui.clearScreen();
+        if (userMoves.size() == artInt.getPrevMoves().size()) {
+            for (int i = 0; i < userMoves.size(); i++) {
+                moveCounter = i;
+                gui.setHideEnemyMoves(false);
+                int[] a = userMoves.get(i);
+                int[] b = artInt.getPrevMoves().get(i);
+                gui.print(true, new int[]{a[0], a[1], a[2], a[3]});
+                gui.print(true, new int[]{a[4], a[5]});
+                gui.print(false, mixer.getMix(new int[]{b[0], b[1], b[2], b[3]}));
+                gui.print(false, new int[]{b[4], b[5]});
+            }
         }
     }
 

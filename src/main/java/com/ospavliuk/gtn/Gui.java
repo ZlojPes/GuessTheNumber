@@ -479,7 +479,6 @@ public class Gui extends JFrame {
     public void nextMove() {
         keyboardEnabled(true);
         numberInput.requestFocus();
-        moveCounter++;
     }
 
     private class KeyboardListener implements ActionListener {
@@ -509,15 +508,15 @@ public class Gui extends JFrame {
         boolean numberInputEnabled = numberInput.isEnabled();
     }
 
-    public Settings getCurrentSettings(){
+    public Settings getCurrentSettings() {
         return new Settings();
     }
 
-    String getNumberInputText(){
+    String getNumberInputText() {
         return numberInput.getText();
     }
 
-    void setNumberInputText(String text){
+    void setNumberInputText(String text) {
         numberInput.setText(text);
     }
 
@@ -568,7 +567,6 @@ public class Gui extends JFrame {
             startButton.setText("Прервать игру");
             game.setGameStarted(true);
             game.start();
-            moveCounter = 0;
             hideEnemyMoves = jComboBox2.getSelectedIndex() == 1;
             keyboardEnabled(true);
             jButtonBack.setEnabled(false);
@@ -619,7 +617,6 @@ public class Gui extends JFrame {
     }
 
     private Game game;
-    private File scoreFile;
     private JButton enterButton;
     protected JTextField infoString;
     private JButton jButton0;
@@ -659,10 +656,6 @@ public class Gui extends JFrame {
     private JTextField globalScoreField;
     private JLabel totalScoreLabel;
     private final JButton[] keyboard;
-    private ArtInt artInt;
-    private Mixer mixer;
-    private ArrayList<int[]> userMoves;
-    private int moveCounter;
     private boolean hideEnemyMoves;
     private KeyboardListener listener = new KeyboardListener();
 
@@ -685,6 +678,15 @@ public class Gui extends JFrame {
             numberInput.setCaretColor(t.length() < 4 ? Color.GREEN : Color.RED);
         }
     }
+
+    public boolean isHideEnemyMoves() {
+        return hideEnemyMoves;
+    }
+
+    public void setHideEnemyMoves(boolean hideEnemyMoves) {
+        this.hideEnemyMoves = hideEnemyMoves;
+    }
+
 
     private void keyboardEnabled(boolean en) {
         for (JButton b : keyboard) {
@@ -717,7 +719,7 @@ public class Gui extends JFrame {
         if (value.length == 4) {
             s2 = "" + value[0] + value[1] + value[2] + value[3] + " - ";
             if (firstValue) {
-                s1 = moveCounter + 1 + ").   ";
+                s1 = game.getMoveCounter() + 1 + ").   ";
             } else {
                 s1 = "      ";
                 if (hideEnemyMoves) {
@@ -737,33 +739,21 @@ public class Gui extends JFrame {
         jTextPane1.setText(jTextPane1.getText() + "\n" + text);
     }
 
-    protected void printAll() {
+    void clearScreen() {
         jTextPane1.setText("");
-        if (userMoves.size() == artInt.getPrevMoves().size()) {
-            for (int i = 0; i < userMoves.size(); i++) {
-                moveCounter = i;
-                hideEnemyMoves = false;
-                int[] a = userMoves.get(i);
-                int[] b = artInt.getPrevMoves().get(i);
-                print(true, new int[]{a[0], a[1], a[2], a[3]});
-                print(true, new int[]{a[4], a[5]});
-                print(false, mixer.getMix(new int[]{b[0], b[1], b[2], b[3]}));
-                print(false, new int[]{b[4], b[5]});
-            }
-        }
     }
 
-    void setStartButtonEnabled(boolean enabled){
+    void setStartButtonEnabled(boolean enabled) {
         startButton.setEnabled(enabled);
     }
 
-    void manualScorePrepare(){
+    void manualScorePrepare() {
         setManualScoreEnabled(true);
         keyboardEnabled(true);
         scoreField1.requestFocus();
     }
 
-    int[] getManualScore(){
+    int[] getManualScore() {
         return new int[]{Integer.parseInt(scoreField1.getText()), Integer.parseInt(scoreField2.getText())};
     }
 
@@ -786,7 +776,7 @@ public class Gui extends JFrame {
         scoreField2.setEnabled(b);
     }
 
-    void setGlobalScore(int[]score){
+    void setGlobalScore(int[] score) {
         globalScoreField.setText("" + score[0] + ":" + score[1]);
         if (score[0] == score[1] && score[0] != 0) {
             globalResultLabel.setText("Ничья!");
