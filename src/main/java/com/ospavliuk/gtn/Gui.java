@@ -26,14 +26,13 @@ public class Gui extends JFrame {
         } catch (UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Gui.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-
     }
 
     public Gui(Game game) {
         this.game = game;
         initComponents();
-        keyboard = new JButton[]{jButton0, jButton1, jButton2, jButton3, jButton4, jButton5, jButton6, jButton7, jButton8, jButton9, jButtonBack, enterButton};
-
+        keyboard = new JButton[]{jButton0, jButton1, jButton2, jButton3, jButton4, jButton5, jButton6, jButton7,
+                jButton8, jButton9, jButtonBack, enterButton};
     }
 
     private void initComponents() {
@@ -512,10 +511,6 @@ public class Gui extends JFrame {
         return new Settings();
     }
 
-    String getNumberInputText() {
-        return numberInput.getText();
-    }
-
     void setNumberInputText(String text) {
         numberInput.setText(text);
     }
@@ -679,14 +674,9 @@ public class Gui extends JFrame {
         }
     }
 
-    public boolean isHideEnemyMoves() {
-        return hideEnemyMoves;
-    }
-
     public void setHideEnemyMoves(boolean hideEnemyMoves) {
         this.hideEnemyMoves = hideEnemyMoves;
     }
-
 
     private void keyboardEnabled(boolean en) {
         for (JButton b : keyboard) {
@@ -787,4 +777,3 @@ public class Gui extends JFrame {
         }
     }
 }
-
