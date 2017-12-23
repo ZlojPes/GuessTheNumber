@@ -6,6 +6,7 @@ import java.util.Arrays;
 public class ArtInt {
     private final ArrayList<int[]> prevMoves;
 
+    @SuppressWarnings("WeakerAccess")
     public ArtInt() {
         this.prevMoves = new ArrayList<>();
     }

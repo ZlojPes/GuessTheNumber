@@ -3,7 +3,7 @@ package com.ospavliuk.gtn;
 public class Mixer {
     private final int[] mixer;
 
-    public Mixer() {
+    Mixer() {
         mixer = new int[10];
         int y;
         for (int i = 1; i < 10; i++) {

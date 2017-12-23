@@ -2,10 +2,8 @@ package com.ospavliuk.gtn;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
 import javax.swing.*;
-import javax.swing.event.CaretEvent;
 
 public class Gui extends JFrame {
 
@@ -17,36 +15,32 @@ public class Gui extends JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Gui.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Gui.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Gui.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Gui.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
     }
 
-    public Gui(Game game) {
+    Gui(Game game) {
         this.game = game;
         initComponents();
         keyboard = new JButton[]{jButton0, jButton1, jButton2, jButton3, jButton4, jButton5, jButton6, jButton7,
                 jButton8, jButton9, jButtonBack, enterButton};
+
     }
 
     private void initComponents() {
-        jLayeredPane1 = new JLayeredPane();
-        jPanel1 = new JPanel();
-        jScrollPane1 = new JScrollPane();
+        observerList = new ArrayList<>();
+        JLayeredPane jLayeredPane1 = new JLayeredPane();
+        JPanel jPanel1 = new JPanel();
+        JScrollPane jScrollPane1 = new JScrollPane();
         jTextPane1 = new JTextPane();
         infoString = new JTextField();
-        jLabel6 = new JLabel();
-        jLabel7 = new JLabel();
-        totalScoreLabel = new JLabel();
+        JLabel jLabel6 = new JLabel();
+        JLabel jLabel7 = new JLabel();
+        JLabel globalScoreLabel = new JLabel();
         globalResultLabel = new JLabel();
         globalScoreField = new JTextField();
-        jPanel2 = new JPanel();
+        JPanel jPanel2 = new JPanel();
         jComboBox1 = new JComboBox<>();
         jLabel2 = new JLabel();
         jLabel3 = new JLabel();
@@ -56,7 +50,7 @@ public class Gui extends JFrame {
         jLabel1 = new JLabel();
         jLabel5 = new JLabel();
         numberInput = new JTextField();
-        jPanel3 = new JPanel();
+        JPanel jPanel3 = new JPanel();
         jButton1 = new JButton();
         jButton2 = new JButton();
         jButton3 = new JButton();
@@ -92,37 +86,36 @@ public class Gui extends JFrame {
         );
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Игра \"Числа\"");
+        setTitle("Игра \"Угадай Число!\"");
         setIconImages(null);
-        setLocation(new Point(300, 100));
+        setLocation(new java.awt.Point(300, 100));
         setResizable(false);
 
         jScrollPane1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPane1.setToolTipText("Ход игры");
 
         jTextPane1.setEditable(false);
-        jTextPane1.setToolTipText("тест");
+        jTextPane1.setToolTipText("Здесь отображается история ходов");
         jScrollPane1.setViewportView(jTextPane1);
 
-        infoString.setPreferredSize(new Dimension(60, 20));
+        infoString.setPreferredSize(new java.awt.Dimension(60, 20));
 
         jLabel6.setText("Информация:");
 
-        jLabel7.setFont(new Font("Tahoma", 0, 14)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Tahoma", Font.PLAIN, 14)); // NOI18N
         jLabel7.setText("Ход игры");
-
-        totalScoreLabel.setText("Глобальный счёт:");
+        globalScoreLabel.setText("Суммарный счет игр:");
 
         globalResultLabel.setHorizontalAlignment(SwingConstants.CENTER);
         globalResultLabel.setText("Пока по нулям!");
 
         globalScoreField.setEditable(false);
-        globalScoreField.setFont(new Font("Comic Sans MS", 1, 18)); // NOI18N
-        globalScoreField.setForeground(new Color(0, 255, 0));
-        globalScoreField.setHorizontalAlignment(0);
+        globalScoreField.setFont(new java.awt.Font("Comic Sans MS", Font.BOLD, 18)); // NOI18N
+        globalScoreField.setForeground(new java.awt.Color(0, 255, 0));
+        globalScoreField.setHorizontalAlignment(JTextField.CENTER);
         globalScoreField.setText("0-0");
-        globalScoreField.setCursor(new Cursor(Cursor.TEXT_CURSOR));
-        globalScoreField.setDisabledTextColor(new Color(153, 153, 153));
+        globalScoreField.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        globalScoreField.setDisabledTextColor(new java.awt.Color(153, 153, 153));
         globalScoreField.setDoubleBuffered(true);
 
         GroupLayout jPanel1Layout = new GroupLayout(jPanel1);
@@ -130,22 +123,26 @@ public class Gui extends JFrame {
         jPanel1Layout.setHorizontalGroup(
                 jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                                        .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                                .addGap(72, 72, 72)
+                                .addComponent(jLabel7, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)
+                                .addGap(66, 66, 66))
+                        .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addContainerGap()
+                                        .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                                 .addGroup(jPanel1Layout.createSequentialGroup()
-                                                        .addGap(72, 72, 72)
-                                                        .addComponent(jLabel7, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE))
-                                                .addComponent(jLabel6, GroupLayout.PREFERRED_SIZE, 126, GroupLayout.PREFERRED_SIZE)
-                                                .addComponent(jScrollPane1, GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
-                                                .addComponent(infoString, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                                        .addComponent(totalScoreLabel)/*
-                                                        .addGap(18, 18, 18)*/
-                                                        .addComponent(globalScoreField, GroupLayout.PREFERRED_SIZE, 82, GroupLayout.PREFERRED_SIZE)))
-                                        .addGroup(jPanel1Layout.createSequentialGroup()
-                                                .addGap(23, 23, 23)
-                                                .addComponent(globalResultLabel, GroupLayout.PREFERRED_SIZE, 139, GroupLayout.PREFERRED_SIZE)))
-                                .addContainerGap(19, Short.MAX_VALUE))
+                                                        .addComponent(globalScoreLabel)
+                                                        .addComponent(globalScoreField, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE))
+                                                .addComponent(globalResultLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(10, 10, 10)
+                                        .addComponent(jScrollPane1))
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addContainerGap()
+                                        .addComponent(jLabel6, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addContainerGap()
+                                        .addComponent(infoString, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
         jPanel1Layout.setVerticalGroup(
                 jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -155,128 +152,81 @@ public class Gui extends JFrame {
                                 .addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 243, GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                        .addComponent(totalScoreLabel)
+                                        .addComponent(globalScoreLabel)
                                         .addComponent(globalScoreField, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(globalResultLabel)
-                                .addGap(18, 18, 18)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                                 .addComponent(jLabel6)
-                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(infoString, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
                                 .addContainerGap())
         );
-
         jComboBox1.setModel(new DefaultComboBoxModel<>(new String[]{"одиночная", "сетевая"}));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
-            }
-        });
-
-        jLabel2.setText("Тип игры:");
-
-        jLabel3.setText("Угадывать:");
-
+        jComboBox1.addActionListener(evt4 -> jComboBox1ActionPerformed());
         jComboBox2.setModel(new DefaultComboBoxModel<>(new String[]{"различные числа", "общее число"}));
-        jComboBox2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox2ActionPerformed(evt);
-            }
-        });
-
-        jLabel4.setText("Своё число:");
-
+        jComboBox2.addActionListener(evt1 -> jComboBox2ActionPerformed());
         jComboBox3.setModel(new DefaultComboBoxModel<>(new String[]{"ввести вручную", "сгенерировать", "не скажу своё число!"}));
-        jComboBox3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox3ActionPerformed(evt);
-            }
-        });
-
+        jComboBox3.addActionListener(evt3 -> jComboBox3ActionPerformed());
         jLabel1.setText("Установки игры:");
-
-        jLabel5.setHorizontalAlignment(SwingConstants.LEFT);
+        jLabel2.setText("Тип игры:");
+        jLabel3.setText("Угадывать:");
+        jLabel4.setText("Своё число:");
         jLabel5.setText("Введите собственное число:");
+        jLabel6.setText("Информация:");
+        jLabel7.setFont(new Font("Tahoma", Font.PLAIN, 14)); // NOI18N
+        jLabel7.setText("Ход игры");
+        jLabel5.setHorizontalAlignment(SwingConstants.LEFT);
         jLabel5.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-
-        numberInput.setFont(new Font("Comic Sans MS", 1, 24)); // NOI18N
+        numberInput.setFont(new Font("Comic Sans MS", Font.BOLD, 24)); // NOI18N
         numberInput.setForeground(new Color(255, 0, 0));
         numberInput.setCursor(new Cursor(Cursor.TEXT_CURSOR));
         numberInput.setDisabledTextColor(new Color(153, 153, 153));
         numberInput.setDoubleBuffered(true);
-        numberInput.addCaretListener(new javax.swing.event.CaretListener() {
-            public void caretUpdate(javax.swing.event.CaretEvent evt) {
-                numberInputCaretUpdate(evt);
-            }
-        });
-        numberInput.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                game.enter(numberInput.getText());
-            }
-        });
+        numberInput.setToolTipText("Введите сюда четырехзначное число");
+        numberInput.addCaretListener(evt2 -> numberInputCaretUpdate());
+        numberInput.addActionListener(evt -> game.enter(numberInput.getText()));
         numberInput.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                numberInputKeyReleased(evt);
+                numberInputKeyReleased();
             }
         });
-
-
         jButton1.setText("1");
         jButton1.setPreferredSize(new Dimension(62, 37));
         jButton1.addActionListener(listener);
-
         jButton2.setText("2");
         jButton2.setPreferredSize(new Dimension(62, 37));
         jButton2.addActionListener(listener);
-
         jButton3.setText("3");
         jButton3.setPreferredSize(new Dimension(62, 37));
         jButton3.addActionListener(listener);
-
         jButton4.setText("4");
         jButton4.setPreferredSize(new Dimension(62, 37));
         jButton4.addActionListener(listener);
-
         jButton5.setText("5");
         jButton5.setPreferredSize(new Dimension(62, 37));
         jButton5.addActionListener(listener);
-
         jButton6.setText("6");
         jButton6.setPreferredSize(new Dimension(62, 37));
         jButton6.addActionListener(listener);
-
         jButton7.setText("7");
         jButton7.setPreferredSize(new Dimension(62, 37));
         jButton7.addActionListener(listener);
-
         jButton8.setText("8");
         jButton8.setPreferredSize(new Dimension(62, 37));
         jButton8.addActionListener(listener);
-
         jButton9.setText("9");
         jButton9.setPreferredSize(new Dimension(62, 37));
         jButton9.addActionListener(listener);
-
         jButton0.setText("0");
         jButton0.setPreferredSize(new Dimension(62, 37));
         jButton0.addActionListener(listener);
-
         enterButton.setText("ввод");
         enterButton.setPreferredSize(new Dimension(62, 37));
-        enterButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                game.enter(numberInput.getText());
-            }
-        });
-
+        enterButton.addActionListener(evt -> game.enter(numberInput.getText()));
         jButtonBack.setText("назад");
         jButtonBack.setPreferredSize(new Dimension(62, 37));
-        jButtonBack.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonBackActionPerformed(evt);
-            }
-        });
-
+        jButtonBack.addActionListener(evt1 -> jButtonBackActionPerformed());
         GroupLayout jPanel3Layout = new GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -327,39 +277,26 @@ public class Gui extends JFrame {
                                         .addComponent(enterButton, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE))
                                 .addGap(0, 0, Short.MAX_VALUE))
         );
-
-        scoreField2.setFont(new Font("Comic Sans MS", 1, 24)); // NOI18N
+        scoreField2.setFont(new Font("Comic Sans MS", Font.BOLD, 24)); // NOI18N
         scoreField2.setForeground(new Color(0, 0, 255));
-        scoreField2.addCaretListener(new javax.swing.event.CaretListener() {
-            public void caretUpdate(javax.swing.event.CaretEvent evt) {
-                scoreField2CaretUpdate(evt);
-            }
-        });
-        scoreField2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                game.calculateScore();
-            }
-        });
+        scoreField2.addCaretListener(evt1 -> scoreField2CaretUpdate());
+        scoreField2.addActionListener(evt -> game.calculateScore());
         scoreField2.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                scoreField2KeyReleased(evt);
+                scoreField2KeyReleased();
             }
         });
-
         scoreLabel.setHorizontalAlignment(SwingConstants.LEFT);
         scoreLabel.setText("Введите счет хода противника:");
-
-        scoreLabel2.setFont(new Font("Comic Sans MS", 0, 24)); // NOI18N
+        scoreLabel2.setFont(new Font("Comic Sans MS", Font.PLAIN, 24)); // NOI18N
         scoreLabel2.setText(":");
-
-        scoreField1.setFont(new Font("Comic Sans MS", 1, 24)); // NOI18N
+        scoreField1.setFont(new Font("Comic Sans MS", Font.BOLD, 24)); // NOI18N
         scoreField1.setForeground(new Color(0, 0, 255));
         scoreField1.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                scoreField1KeyReleased(evt);
+                scoreField1KeyReleased();
             }
         });
-
         GroupLayout jPanel2Layout = new GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -439,14 +376,8 @@ public class Gui extends JFrame {
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jPanel3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
         );
-
         startButton.setText("Начать игру!");
-        startButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                startButtonActionPerformed(evt);
-            }
-        });
-
+        startButton.addActionListener(evt -> startButtonActionPerformed());
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -475,6 +406,16 @@ public class Gui extends JFrame {
         pack();
     }
 
+    class State {
+        int typeGame1 = jComboBox1.getSelectedIndex();
+        int guess2 = jComboBox2.getSelectedIndex();
+        int ownNumber3 = jComboBox3.getSelectedIndex();
+        boolean ownNumber3Enabled = jComboBox3.isEnabled();
+        boolean numberInputEnabled = numberInput.isEnabled();
+        boolean startButtonGaming = startButton.getText().equals("Прервать игру");
+//        String numberInputText = numberInput.getText();
+    }
+
     public void nextMove() {
         keyboardEnabled(true);
         numberInput.requestFocus();
@@ -482,40 +423,13 @@ public class Gui extends JFrame {
 
     private class KeyboardListener implements ActionListener {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
-            JTextField activeField;
-            if (numberInput.isEnabled()) {
-                activeField = numberInput;
-            } else {
-                if (scoreField1.getText().length() == 0) {
-                    activeField = scoreField1;
-                } else {
-                    activeField = scoreField2;
-                }
-            }
+            JTextField activeField = numberInput.isEnabled() ? numberInput : scoreField1.getText().length() == 0 ? scoreField1 : scoreField2;
             activeField.setText(numberInput.getText() + ((JButton) evt.getSource()).getText());
             setUsedKeysDisabled();
         }
     }
 
-    class Settings {
-        int typeGame1 = jComboBox1.getSelectedIndex();
-        boolean typeGame1Enabled = jComboBox1.isEnabled();
-        int guess2 = jComboBox2.getSelectedIndex();
-        boolean guess2Enabled = jComboBox2.isEnabled();
-        int ownNumber3 = jComboBox3.getSelectedIndex();
-        boolean ownNumber3Enabled = jComboBox3.isEnabled();
-        boolean numberInputEnabled = numberInput.isEnabled();
-    }
-
-    public Settings getCurrentSettings() {
-        return new Settings();
-    }
-
-    void setNumberInputText(String text) {
-        numberInput.setText(text);
-    }
-
-    private void jComboBox2ActionPerformed(ActionEvent evt) {
+    private void jComboBox2ActionPerformed() {
         jComboBox3.setSelectedIndex(jComboBox2.getSelectedIndex());
         jComboBox3.setEnabled(jComboBox2.getSelectedIndex() == 0);
         keyboardEnabled(jComboBox2.getSelectedIndex() == 0);
@@ -524,9 +438,10 @@ public class Gui extends JFrame {
         numberInput.setEnabled(jComboBox2.getSelectedIndex() == 0);
         startButton.setEnabled(jComboBox2.getSelectedIndex() == 1);
         enterButton.setEnabled(false);
+        notifyObservers();
     }
 
-    private void jButtonBackActionPerformed(ActionEvent evt) {
+    private void jButtonBackActionPerformed() {
         String text = numberInput.getText();
         if (text.length() > 0) {
             numberInput.setText(text.substring(0, text.length() - 1));
@@ -534,15 +449,7 @@ public class Gui extends JFrame {
         } else jButtonBack.setEnabled(false);
     }
 
-    private void numberInputKeyReleased(KeyEvent evt) {
-        setUsedKeysDisabled();
-    }
-
-    private void numberInputCaretUpdate(CaretEvent evt) {
-        enterButton.setEnabled(numberInput.getText().length() == 4);
-    }
-
-    private void jComboBox3ActionPerformed(ActionEvent evt) {
+    private void jComboBox3ActionPerformed() {
         boolean b = jComboBox3.getSelectedIndex() == 0;
         keyboardEnabled(b);
         jLabel4.setEnabled(b);
@@ -550,18 +457,19 @@ public class Gui extends JFrame {
         numberInput.setEnabled(b);
         startButton.setEnabled(!b);
         if (!b) numberInput.setText("");
+        notifyObservers();
     }
 
-    private void jComboBox1ActionPerformed(ActionEvent evt) {
+    private void jComboBox1ActionPerformed() {
         jComboBox1.setSelectedIndex(0);
         new Ticker("Сетевая игра в процессе разработки!", this);
     }
 
-    private void startButtonActionPerformed(ActionEvent evt) {
-        if (!game.isGameStarted()) {
+    private void startButtonActionPerformed() {
+        if (startButton.getText().equals("Прервать игру")) {
+            stopGame();
+        } else {
             startButton.setText("Прервать игру");
-            game.setGameStarted(true);
-            game.start();
             hideEnemyMoves = jComboBox2.getSelectedIndex() == 1;
             keyboardEnabled(true);
             jButtonBack.setEnabled(false);
@@ -571,14 +479,11 @@ public class Gui extends JFrame {
             jTextPane1.setText("");
             jLabel5.setText("Предполагаемое число:");
             numberInput.requestFocus();
-        } else {
-            stopGame();
-            game.setGameStarted(false);
-            game.start();
         }
+        notifyObservers();
     }
 
-    private void scoreField1KeyReleased(java.awt.event.KeyEvent evt) {
+    private void scoreField1KeyReleased() {
         String text = scoreField1.getText();
         try {
             Integer n = Integer.parseInt(text);
@@ -593,7 +498,7 @@ public class Gui extends JFrame {
         }
     }
 
-    private void scoreField2KeyReleased(KeyEvent evt) {
+    private void scoreField2KeyReleased() {
         String text = scoreField2.getText();
         try {
             Integer n = Integer.parseInt(text);
@@ -607,8 +512,24 @@ public class Gui extends JFrame {
         }
     }
 
-    private void scoreField2CaretUpdate(CaretEvent evt) {
+    private void scoreField2CaretUpdate() {
         enterButton.setEnabled(scoreField2.getText().length() == 1);
+    }
+
+    public State getCurrentState() {
+        return new State();
+    }
+
+    void clearInputField() {
+        numberInput.setText("");
+    }
+
+    private void numberInputKeyReleased() {
+        setUsedKeysDisabled();
+    }
+
+    private void numberInputCaretUpdate() {
+        enterButton.setEnabled(numberInput.getText().length() == 4);
     }
 
     private Game game;
@@ -633,13 +554,6 @@ public class Gui extends JFrame {
     private JLabel jLabel3;
     private JLabel jLabel4;
     private JLabel jLabel5;
-    private JLabel jLabel6;
-    private JLabel jLabel7;
-    private JLayeredPane jLayeredPane1;
-    private JPanel jPanel1;
-    private JPanel jPanel2;
-    private JPanel jPanel3;
-    private JScrollPane jScrollPane1;
     private JTextPane jTextPane1;
     private JTextField numberInput;
     private JTextField scoreField1;
@@ -649,10 +563,10 @@ public class Gui extends JFrame {
     private JButton startButton;
     private JLabel globalResultLabel;
     private JTextField globalScoreField;
-    private JLabel totalScoreLabel;
     private final JButton[] keyboard;
     private boolean hideEnemyMoves;
     private KeyboardListener listener = new KeyboardListener();
+    private java.util.List<GuiObserver> observerList;
 
     private void setUsedKeysDisabled() {
         if (numberInput.isEnabled()) {
@@ -663,11 +577,11 @@ public class Gui extends JFrame {
             for (int i = 0; i < 10; i++) {
                 keyboard[i].setEnabled(!output.contains(i));
             }
-            String t = "";
+            StringBuilder t = new StringBuilder();
             for (int i : output) {
-                t += i;
+                t.append(i);
             }
-            numberInput.setText(t);
+            numberInput.setText(t.toString());
             jButtonBack.setEnabled(t.length() > 0);
             numberInput.setCaretPosition(caret < t.length() ? caret : t.length());
             numberInput.setCaretColor(t.length() < 4 ? Color.GREEN : Color.RED);
@@ -679,8 +593,8 @@ public class Gui extends JFrame {
     }
 
     private void keyboardEnabled(boolean en) {
-        for (JButton b : keyboard) {
-            b.setEnabled(en);
+        for (JButton button : keyboard) {
+            button.setEnabled(en);
         }
         if (!scoreField1.isEnabled()) {
             numberInput.setEnabled(en);
@@ -692,6 +606,7 @@ public class Gui extends JFrame {
                 keyboard[i].setEnabled(false);
             }
         }
+        notifyObservers();
     }
 
     private void settingsEnabled(boolean b) {
@@ -704,11 +619,11 @@ public class Gui extends JFrame {
         jComboBox3.setEnabled(b && jComboBox2.getSelectedIndex() == 0);
     }
 
-    protected void print(boolean firstValue, int[] value) {
+    protected void print(boolean userMove, int[] value) {
         String s1 = "", s2;
         if (value.length == 4) {
             s2 = "" + value[0] + value[1] + value[2] + value[3] + " - ";
-            if (firstValue) {
+            if (userMove) {
                 s1 = game.getMoveCounter() + 1 + ").   ";
             } else {
                 s1 = "      ";
@@ -719,7 +634,7 @@ public class Gui extends JFrame {
         } else {
             s2 = "" + value[0] + ":" + value[1];
         }
-        if ((!firstValue) && value.length == 2) {
+        if ((!userMove) && value.length == 2) {
             s2 += "\n";
         }
         jTextPane1.setText(jTextPane1.getText() + s1 + s2);
@@ -733,8 +648,8 @@ public class Gui extends JFrame {
         jTextPane1.setText("");
     }
 
-    void setStartButtonEnabled(boolean enabled) {
-        startButton.setEnabled(enabled);
+    void enableStartButton() {
+        startButton.setEnabled(true);
     }
 
     void manualScorePrepare() {
@@ -764,16 +679,27 @@ public class Gui extends JFrame {
         scoreField2.setText("");
         scoreField1.setEnabled(b);
         scoreField2.setEnabled(b);
+        notifyObservers();
     }
 
-    void setGlobalScore(int[] score) {
-        globalScoreField.setText("" + score[0] + ":" + score[1]);
-        if (score[0] == score[1] && score[0] != 0) {
+    void setGlobalScore(int user, int comp) {
+        globalScoreField.setText("" + user + ":" + comp);
+        if (user == comp && user != 0) {
             globalResultLabel.setText("Ничья!");
-        } else if (score[0] > score[1]) {
+        } else if (user > comp) {
             globalResultLabel.setText("в Вашу пользу!");
-        } else if (score[0] < score[1]) {
+        } else if (user < comp) {
             globalResultLabel.setText("не в Вашу пользу!");
+        }
+    }
+
+    void registerObserver(GuiObserver observer) {
+        observerList.add(observer);
+    }
+
+    private void notifyObservers() {
+        for (GuiObserver anObserverList : observerList) {
+            anObserverList.guiStateChanged(new State());
         }
     }
 }

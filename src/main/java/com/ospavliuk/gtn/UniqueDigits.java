@@ -3,13 +3,9 @@ package com.ospavliuk.gtn;
 import java.util.*;
 
 public class UniqueDigits {
-    int[] input;
+    private int[] input;
 
-    public UniqueDigits(int[] input) {
-        this.input = input;
-    }
-
-    public UniqueDigits(char[] input) {
+    UniqueDigits(char[] input) {
         this.input = new int[input.length];
         for (int i = 0; i < input.length; i++)
             this.input[i] = (int) input[i] - 48;

@@ -3,13 +3,12 @@ package com.ospavliuk.gtn;
 import javax.swing.*;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-public class Game {
-    Gui gui;
-    ArtInt artInt;
-    Mixer mixer;
+public class Game implements GuiObserver {
+    private Gui gui;
+    private Gui.State state;
+    private ArtInt artInt;
+    private Mixer mixer;
     private boolean gameStarted;
     private int userWinCounter, compWinCounter;
     private ArrayList<int[]> userMoves;
@@ -17,39 +16,33 @@ public class Game {
     private File scoreFile;
     private int moveCounter;
 
-    public boolean isGameStarted() {
-        return gameStarted;
-    }
-
-    public void setGameStarted(boolean gameStarted) {
-        this.gameStarted = gameStarted;
-    }
-
-    public Game() {
+    private Game() {
         gui = new Gui(this);
         gui.setVisible(true);
         scoreFile = new File((new JFileChooser()).getFileSystemView().getDefaultDirectory().toString() + "\\num");
         initGlobalScore();
+        gui.registerObserver(this);
     }
 
-    public void start() {
+    private void start() {
         if (gameStarted) {
             artInt = new ArtInt();
             mixer = new Mixer();
             moveCounter = 0;
+            writeGlobalScore(userWinCounter, compWinCounter + 1);
             userMoves = new ArrayList<>();
-            Gui.Settings settings = gui.getCurrentSettings();
-//            if (settings.typeGame1 == 0 && settings.guess2 == 0)
+            Gui.State state = gui.getCurrentState();
             compNum = RandomGen.getRandom();
-            if (settings.guess2 == 1) {
+            if (state.guess2 == 1) {
                 userNum = compNum;
             }
-            if (settings.ownNumber3Enabled && settings.ownNumber3 == 1) {
+            if (state.ownNumber3Enabled && state.ownNumber3 == 1) {
                 userNum = RandomGen.getRandom();
                 new Ticker("Ваше число установлено как " + userNum[0] + userNum[1] + userNum[2] + userNum[3], gui);
             }
         } else {
             gui.print("Прервано пользователем");
+            initGlobalScore();
         }
     }
 
@@ -58,20 +51,19 @@ public class Game {
     }
 
     public void enter(String inputNumber) {
-        Gui.Settings settings = gui.getCurrentSettings();
         UniqueDigits un = new UniqueDigits(inputNumber.toCharArray());
         if (gameStarted) {
-            if (settings.numberInputEnabled) {
+            if (state.numberInputEnabled) {
                 if (un.isValidNumber()) {
                     int[] userNumber = un.getIntArray();
                     gui.print(true, userNumber);
                     gui.print(true, getRemoteScore(userNumber));
                     int[] userScore = getRemoteScore(userNumber);
                     userMoves.add(new int[]{userNumber[0], userNumber[1], userNumber[2], userNumber[3], userScore[0], userScore[1]});
-                    gui.setNumberInputText("");
+                    gui.clearInputField();
                     try {
                         int[] compScore = getCompScore();
-                        if (settings.numberInputEnabled && compScore != null) {
+                        if (state.numberInputEnabled && compScore != null) {
                             checkWinner(userScore, compScore);
                         } else {
                             gui.manualScorePrepare();
@@ -81,14 +73,13 @@ public class Game {
                     }
                 }
             } else {
-//                keyboardEnabled(true);
                 calculateScore();
             }
         } else {
             if (un.isValidNumber()) {
                 new Ticker("Ваше число установлено как " + inputNumber + ". Нажмите \"начать игру!\" для старта", gui);
                 userNum = un.getIntArray();
-                gui.setStartButtonEnabled(true);
+                gui.enableStartButton();
             } else new Ticker("Проверьте данные и попробуйте еще раз!", gui);
         }
     }
@@ -107,34 +98,32 @@ public class Game {
     }
 
     private void wrongScore() {
-        gui.print("Вы допустили ошибку при вводе счёта в одном из ходов. Вам засчитывается техническое поражение.");
+        gui.print("Вы допустили ошибку при\nвводе счёта в одном из ходов.\nВам засчитывается техничес-\nкое поражение.");
         gui.stopGame();
     }
 
     private void checkWinner(int[] userScore, int[] compScore) {
-        Gui.Settings settings = gui.getCurrentSettings();
         moveCounter++;
         try {
-            if (settings.ownNumber3 == 2 && compScore[1] < 4) {
+            if (state.ownNumber3 == 2 && compScore[1] < 4) {
                 artInt.nextMove();
             }
             if (userScore[1] == 4 || compScore[1] == 4) {
                 printAll();
+                gameStarted = false;
+                gui.stopGame();
                 if (userScore[1] == 4 && compScore[1] == 4) {
                     gui.print("Ничья!");
-                    gui.stopGame();
+                    writeGlobalScore(++userWinCounter, ++compWinCounter);
                 } else if (userScore[1] == 4) {
                     gui.print("Вы выиграли!");
-                    userWinCounter++;
-                    gui.stopGame();
+                    writeGlobalScore(++userWinCounter, compWinCounter);
                 } else if (compScore[1] == 4) {
                     gui.print("Вы проиграли!");
-                    if (settings.typeGame1 == 0 && settings.guess2 == 0)
+                    if (state.typeGame1 == 0 && state.guess2 == 0)
                         gui.print("Вашей целью было число " + compNum[0] + compNum[1] + compNum[2] + compNum[3]);
-                    compWinCounter++;
-                    gui.stopGame();
                 }
-                gui.setGlobalScore(new int[]{userWinCounter, compWinCounter});
+                initGlobalScore();
             } else {
                 gui.nextMove();
             }
@@ -143,7 +132,7 @@ public class Game {
         }
     }
 
-    protected void printAll() {
+    private void printAll() {
         gui.clearScreen();
         if (userMoves.size() == artInt.getPrevMoves().size()) {
             for (int i = 0; i < userMoves.size(); i++) {
@@ -160,12 +149,11 @@ public class Game {
     }
 
     private int[] getCompScore() throws WrongScoreException {
-        Gui.Settings settings = gui.getCurrentSettings();
         int[] score;
         int[] artIntMove = artInt.nextMove();
         int[] mixedMove = mixer.getMix(artIntMove);
         gui.print(false, mixedMove);
-        if (settings.ownNumber3 != 2)
+        if (state.ownNumber3 != 2)
             score = Score.getScore(userNum, mixedMove);
         else {
             artInt.writeToLog(artIntMove);
@@ -181,8 +169,7 @@ public class Game {
     }
 
     private int[] getRemoteScore(int[] intArray) {
-        Gui.Settings settings = gui.getCurrentSettings();
-        if (settings.typeGame1 == 0) {
+        if (state.typeGame1 == 0) {
             int[] score = Score.getScore(compNum, intArray);
             return new int[]{score[score.length - 2], score[score.length - 1]};
         }
@@ -191,42 +178,53 @@ public class Game {
 
 
     public static void main(String[] args) {
-        Game game = new Game();
+        new Game();
     }
 
 
     private void initGlobalScore() {
         BufferedReader reader = null;
-        BufferedWriter writer = null;
         try {
             reader = new BufferedReader(new FileReader(scoreFile));
             String s = reader.readLine();
             String[] score = s.split(":");
             userWinCounter = Integer.parseInt(score[0]);
             compWinCounter = Integer.parseInt(score[1]);
-            gui.setGlobalScore(new int[]{userWinCounter, compWinCounter});
-        } catch (FileNotFoundException e) {
-            try {
-                writer = new BufferedWriter(new FileWriter(scoreFile));
-                writer.write("0:0");
-            } catch (IOException e1) {
-                Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, (String) null, e1);
-            }
+            gui.setGlobalScore(userWinCounter, compWinCounter);
+        } catch (FileNotFoundException | NumberFormatException e) {
+            writeGlobalScore(0, 0);
         } catch (IOException e3) {
             e3.printStackTrace();
         } finally {
             try {
-                reader.close();
+                if (reader != null) {
+                    reader.close();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    private void writeGlobalScore(int user, int comp) {
+        PrintWriter writer = null;
+        try {
+            writer = new PrintWriter(new FileWriter(scoreFile));
+            writer.print(user + ":" + comp);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
             if (writer != null) {
-                try {
-                    writer.close();
-                } catch (IOException e2) {
-                    e2.printStackTrace();
-                }
+                writer.close();
             }
         }
+    }
+
+    @Override
+    public void guiStateChanged(Gui.State state) {
+        this.state = state;
+        if(gameStarted!=state.startButtonGaming){
+            gameStarted=state.startButtonGaming;
+            start();        }
     }
 }
