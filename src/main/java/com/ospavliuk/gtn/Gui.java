@@ -413,7 +413,6 @@ public class Gui extends JFrame {
         boolean ownNumber3Enabled = jComboBox3.isEnabled();
         boolean numberInputEnabled = numberInput.isEnabled();
         boolean startButtonGaming = startButton.getText().equals("Прервать игру");
-//        String numberInputText = numberInput.getText();
     }
 
     public void nextMove() {

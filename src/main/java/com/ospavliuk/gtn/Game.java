@@ -41,7 +41,8 @@ public class Game implements GuiObserver {
                 new Ticker("Ваше число установлено как " + userNum[0] + userNum[1] + userNum[2] + userNum[3], gui);
             }
         } else {
-            gui.print("Прервано пользователем");
+            gui.print("Игра остановлена");
+            new Ticker("Игра завершена дострочно", gui);
             initGlobalScore();
         }
     }
@@ -223,8 +224,9 @@ public class Game implements GuiObserver {
     @Override
     public void guiStateChanged(Gui.State state) {
         this.state = state;
-        if(gameStarted!=state.startButtonGaming){
-            gameStarted=state.startButtonGaming;
-            start();        }
+        if (gameStarted != state.startButtonGaming) {
+            gameStarted = state.startButtonGaming;
+            start();
+        }
     }
 }

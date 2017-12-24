@@ -1,19 +1,11 @@
 package com.ospavliuk.gtn;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 public class ArtInt {
-    private final ArrayList<int[]> prevMoves;
+    private static final int[][] LEGAL_COMBINATIONS = new int[5040][];
+    private final java.util.ArrayList<int[]> prevMoves = new java.util.ArrayList<>();
 
-    @SuppressWarnings("WeakerAccess")
-    public ArtInt() {
-        this.prevMoves = new ArrayList<>();
-    }
-
-    public int[] nextMove() throws WrongScoreException {
-        int[] attempt = null;
-        exit:
+    static {
+        int counter = 0;
         for (int a = 0; a < 10; a++) {
             for (int b = 0; b < 10; b++) {
                 if (b != a) {
@@ -21,17 +13,22 @@ public class ArtInt {
                         if (c != b && c != a) {
                             for (int d = 0; d < 10; d++) {
                                 if (d != c && d != b && d != a) {
-                                    attempt = new int[]{a, b, c, d};
-                                    if (compareToPrevious(attempt)) {
-                                        break exit;
-                                    } else {
-                                        attempt = null;
-                                    }
+                                    LEGAL_COMBINATIONS[counter++] = new int[]{a, b, c, d};
                                 }
                             }
                         }
                     }
                 }
+            }
+        }
+    }
+
+    public int[] nextMove() throws WrongScoreException {
+        int[] attempt = null;
+        for (int[] current : LEGAL_COMBINATIONS) {
+            if (compareToPrevious(current)) {
+                attempt = current;
+                break;
             }
         }
         if (attempt == null) {
@@ -41,11 +38,9 @@ public class ArtInt {
     }
 
     private boolean compareToPrevious(int[] attempt) {
-        int[] number = new int[4];
         for (int[] move : prevMoves) {
-            System.arraycopy(move, 0, number, 0, 4);
             int[] score = Score.getScore(attempt, move);
-            if (score[score.length - 2] != move[4] || score[score.length - 1] != move[5] || Arrays.equals(attempt, number)) {
+            if (score[0] != move[4] || score[1] != move[5]) {
                 return false;
             }
         }
@@ -56,7 +51,7 @@ public class ArtInt {
         prevMoves.add(a);
     }
 
-    public ArrayList<int[]> getPrevMoves() {
+    public java.util.ArrayList<int[]> getPrevMoves() {
         return prevMoves;
     }
 }
